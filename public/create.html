@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>3 Col Portfolio - Start Bootstrap Template</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/3-col-portfolio.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul id="topbar" class="nav navbar-nav">
+                    <li><a href="index.html">All</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div id="puthere"></div>
+
+    </div>
+    <!-- /.container -->
+
+    <div class="container">
+        <div class="col-lg-12">
+        <form method="post" action="/api/create" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="inputCategory">Category</label>
+                        <input type="text" class="form-control" name="category" placeholder="Enter category">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputTitle">Title</label>
+                        <input type="text" class="form-control" name="title" placeholder="Enter title">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputLocation">Location</label>
+                        <div id="map"></div>
+                        <input type="text" class="form-control" id="inputLocationX"  name="locationX">
+                        <input type="text" class="form-control"  id="inputLocationY" name="locationY">
+
+                    </div>
+                    <div class="form-group">
+                        <label for="textareaDescription">Description</label>
+                        <textarea class="form-control"  name="description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageInput">Image</label>
+                        <input type="file" class="form-control-file" name="image">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+        </div>
+
+    </div>
+               
+
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvkp-hH2o_yI7V6rintnrmqZ_uwOZQEpE"></script>
+
+    <script defer>
+        "use strict";
+        let map;
+        let marker;
+        let mapOptions;
+        let mapCanvas;
+        let x;
+        let y;
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+        function initialize() {
+            mapCanvas = document.getElementById('map');
+            mapOptions = {
+                center: new google.maps.LatLng(44.5403, -78.5463),
+                zoom: 8,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+
+            map = new google.maps.Map(mapCanvas, mapOptions)
+        /*   
+            */
+
+            google.maps.event.addListener(map, 'click', function(event) {
+                marker = new google.maps.Marker({
+                position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()),
+                map: map
+                });
+                document.getElementById("inputLocationX").value = event.latLng.lat();
+                document.getElementById("inputLocationY").value = event.latLng.lng();
+            });
+        }
+    </script>
+
+</body>
+
+</html>
