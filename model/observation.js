@@ -18,7 +18,7 @@ const observation = mongoose.Schema({
 
 const Observation = mongoose.model('Observation', observation);
 
-modules.exports = {
+module.exports = {
     observation,
     Observation,
 };
