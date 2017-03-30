@@ -2,7 +2,9 @@
 
 const express = require('express');
 const observation = require('./model/observation');
-const router  = require('./router');
+const router = require('./router');
+const bodyParser = require('body-parser');
+
 const app = express();
 //const db = require('db');
 
@@ -18,6 +20,18 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
     // we're connected!
 });
+
+app.use(bodyParser.urlencoded({
+    extended: true,
+}));
+
+app.use(bodyParser.json());
+
+app.post('/api/create', function (req, res) {
+    console.log(req.body.category);
+    console.log(req.body.title);
+});
+
 
 
 app.listen(3000);
