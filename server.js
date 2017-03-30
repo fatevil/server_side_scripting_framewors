@@ -50,7 +50,7 @@ fluffy.save(function (err, fluffy) {
     fluffy.speak();
 });
 
-Kitten.find(function (err, kittens) {
+Kitten.find(function (err, kittensy) {
     if (err) return console.error(err);
     console.log(kittens);
 });
