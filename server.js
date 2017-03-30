@@ -22,7 +22,6 @@ const kittySchema = mongoose.Schema({
 });
 
 
-console.log(silence.name); // 'Silence'
 
 // NOTE: methods must be added to the schema
 // before compiling it with mongoose.model()
@@ -38,6 +37,8 @@ const Kitten = mongoose.model('Kitten', kittySchema);
 const silence = new Kitten({
     name: 'Silence',
 });
+
+console.log(silence.name); // 'Silence'
 
 const fluffy = new Kitten({
     name: 'fluffy',
