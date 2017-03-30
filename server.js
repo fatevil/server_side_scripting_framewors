@@ -33,7 +33,7 @@ kittySchema.methods.speak = function () {
     console.log(greeting);
 };
 
-let Kitten = mongoose.model('Kitten', kittySchema);
+const Kitten = mongoose.model('Kitten', kittySchema);
 
 const silence = new Kitten({
     name: 'Silence',
