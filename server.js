@@ -2,6 +2,7 @@
 
 const express = require('express');
 const observation = require('./model/observation');
+const router  = require('./router');
 const app = express();
 //const db = require('db');
 
