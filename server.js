@@ -1,7 +1,7 @@
 'user strict';
 
 const express = require('express');
-const observation = require('./observation');
+const observation = require('./model/observation');
 const app = express();
 //const db = require('db');
 
