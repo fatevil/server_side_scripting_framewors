@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>3 Col Portfolio - Start Bootstrap Template</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/3-col-portfolio.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <style>
+        #map {
+            height: 150px;
+            width: 150px;
+            position: absolute;
+            top: 0px;
+            right: 15px;
+        }
+
+        #modalImage {
+            height: 400;
+            width: 400;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul id="topbar" class="nav navbar-nav">
+                    <li><a href="index.html">All</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div id="puthere"></div>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="contact" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" id="back">
+                <div class="modal-header">
+                    <h4>Contact
+                        <h4>
+                </div>
+                <div class="modal-body">
+                    <div id="map"></div>
+                    <img id="modalImage" class="img-responsive" src="" alt="">
+
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal">Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    <script defer src="main.js"></script>
+    <script defer src="functions.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvkp-hH2o_yI7V6rintnrmqZ_uwOZQEpE"></script>
+    <script defer src="map_stuff.js"></script>
+
+    <script defer>
+        "use strict";
+
+        $(document).ready(function () {
+
+            fetchData().then(function (response) {
+                console.log(response);
+
+                let getCategory = window.location.search.substr(1).split('=');
+                if (getCategory.length == 2) {
+                    functionOne(response, getCategory[1]);
+                } else {
+                    functionOne(response);
+                }
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>
