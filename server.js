@@ -9,7 +9,7 @@ app.use(express.static('public'));
 
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://mongodb11286-hi-florian.jelastic.metropolia.fi/eventplanner');
+mongoose.connect('mongodb://admin:KXMbso21272@mongodb11286-hi-florian.jelastic.metropolia.fi/eventplanner');
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
