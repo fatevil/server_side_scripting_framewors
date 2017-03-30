@@ -1,11 +1,11 @@
 'user strict';
 
 const express = require('express');
+const app = express();
 const observation = require('./model/observation');
 const router = require('./router');
 const multer = require('multer');
 const sharp = require('sharp');
-const app = express();
 const Promise = require('es6-promise').Promise;
 const upload = multer({
     dest: 'public/images/'
@@ -16,7 +16,7 @@ app.use(express.static('public'));
 
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://accountAdmin01:changeMe@mongodb11286-hi-florian.jelastic.metropolia.fi:27017/eventplanner');
+mongoose.connect('mongodb://accountAdmin01:changeMe@mongodb11286-hi-florian.jelastic.metropolia.fi/eventplanner');
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
