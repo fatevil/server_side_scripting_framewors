@@ -52,7 +52,7 @@ fluffy.save(function (err, fluffy) {
 
 Kitten.find(function (err, kittensy) {
     if (err) return console.error(err);
-    console.log(kittens);
+    console.log(kittensy);
 });
 
 app.listen(3000);
