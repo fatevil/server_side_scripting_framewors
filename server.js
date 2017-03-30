@@ -1,3 +1,5 @@
+'user strict';
+
 const express = require('express');
 const app = express();
 //const db = require('db');
@@ -5,7 +7,6 @@ const app = express();
 
 app.use(express.static('public'));
 
-'user strict';
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://mongodb11286-hi-florian.jelastic.metropolia.fi/eventplanner');
