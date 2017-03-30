@@ -75,6 +75,7 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
     <script defer src="main.js"></script>
+    <script defer src="data.js"></script>
     <script defer src="functions.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvkp-hH2o_yI7V6rintnrmqZ_uwOZQEpE"></script>
     <script defer src="map_stuff.js"></script>
@@ -84,16 +85,14 @@
 
         $(document).ready(function () {
 
-            fetchData().then(function (response) {
-                console.log(response);
+    
 
                 let getCategory = window.location.search.substr(1).split('=');
                 if (getCategory.length == 2) {
-                    functionOne(response, getCategory[1]);
+                    functionOne(spyArray, getCategory[1]);
                 } else {
-                    functionOne(response);
+                    functionOne(spyArray);
                 }
-            });
 
         });
     </script>

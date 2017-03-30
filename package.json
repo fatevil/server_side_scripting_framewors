@@ -1,0 +1,23 @@
+{
+  "name": "server_side_scripting_framewors-master",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.15.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fatevil/server_side_scripting_framewors.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fatevil/server_side_scripting_framewors/issues"
+  },
+  "homepage": "https://github.com/fatevil/server_side_scripting_framewors#readme"
+}
