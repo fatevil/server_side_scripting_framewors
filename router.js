@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-app.post('/observations', function (req, res) {
+app.post('/api/create', function (req, res) {
     console.log(req.body.category);
     console.log(req.body.title);
 });
