@@ -4,7 +4,6 @@
   "description": "",
   "main": "server.js",
   "dependencies": {
-    "body-parser": "^1.17.1",
     "es6-promise": "^3.1.2",
     "express": "^4.15.2",
     "moment": "^2.18.1",
