@@ -9,7 +9,7 @@ let y;
 google.maps.event.addDomListener(window, 'load', initialize);
 
 function initialize() {
-    mapCanvas = document.getElementById('map');
+    mapCanvas = document.getElementById('mapModal');
     mapOptions = {
         center: new google.maps.LatLng(44.5403, -78.5463),
         zoom: 8,
@@ -42,13 +42,13 @@ function openModalWindow(element) {
     google.maps.event.trigger(map, "resize");
     map.setCenter(new google.maps.LatLng(x, y));
 
-    $('#contact').on('shown.bs.modal', function () {
+    $('#contact').on('shown.bs.modal', function() {
         google.maps.event.trigger(map, "resize");
         map.setCenter(new google.maps.LatLng(x, y));
     });
 }
 
-$('#map').hover((event) => {
+$('#mapModal').hover((event) => {
     $(event.currentTarget).animate({
         width: 300,
         height: 300,

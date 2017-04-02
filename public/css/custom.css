@@ -1,5 +1,17 @@
         #map {
             height: 400px;
-            
             margin: 20px;
+        }
+        
+        #mapModal {
+            height: 150px;
+            width: 150px;
+            position: absolute;
+            top: 0px;
+            right: 15px;
+        }
+        
+        #modalImage {
+            height: 400;
+            width: 400;
         }

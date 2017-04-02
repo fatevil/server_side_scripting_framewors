@@ -2,13 +2,11 @@
 
 const express = require('express');
 const app = express();
-const observation = require('./model/observation');
 const router = require('./router');
 const multer = require('multer');
 const sharp = require('sharp');
-const Promise = require('es6-promise').Promise;
 const upload = multer({
-    dest: 'public/images/'
+    dest: 'public/images/',
 });
 
 
@@ -16,71 +14,85 @@ app.use(express.static('public'));
 
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://accountAdmin01:changeMe@mongodb11286-hi-florian.jelastic.metropolia.fi/eventplanner');
+mongoose.connect('mongodb://accountAdmin01:changeMe@127.0.0.1:27017/observations');
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
+db.once('open', function() {
     // we're connected!
 });
 
 
-app.post('/api/create', upload.single('image'), function (req, res, next) {
-    // req.file is the `avatar` file 
-    // req.body will hold the text fields, if there were any 
-    console.log(req.body);
-
-    const processImage = new Promise((resolve, reject) => {
-        const file = `public/images/image/${req.file}`;
-        sharp(req.file.path)
-            .resize(320, 300)
-            .toFiledestination(file)
-            .then(() => {
-                resolve(file);
-            }).catch((err) => {
-                reject(err);
-            });
-    });
-
-    const processThumbnail = new Promise((resolve, reject) => {
-        const file = `public/images/thumbnail/${req.file}`;
-        sharp(req.file.path)
-            .resize(320, 300)
-            .toFile(file)
-            .then(() => {
-                resolve(file);
-            }).catch((err) => {
-                reject(err);
-            });
-    });
-
-
-    Promise.all([processImage, processThumbnail]).then((files) => {
-        const imageFile = files[0];
-        const thumbnailFile = files[1];
-        const originalFile = `public/images/image/${req.file}`;
-        const observationObject = new Observation({
-            time: new Date(),
-            category: req.body.category,
-            title: req.body.title,
-            details: req.body.description,
-            coordinates: {
-                'lat': req.body.locationX,
-                'lng': req.body.locationY,
-            },
-            thumbnail: thumbnailFile,
-            image: imageFile,
-            original: originalFile,
-        });
-        observationObject.save(function (err, observationObject) {
-            if (err) return console.error(err);
-        });
-        Observation.find(function (err, observationCollection) {
-            if (err) return console.error(err);
-            console.log(observationCollection);
-        });
-    });
+const observation = mongoose.Schema({
+    time: Date,
+    category: String,
+    title: String,
+    details: String,
+    coordinates: {
+        lat: Number,
+        lng: Number,
+    },
+    thumbnail: String,
+    image: String,
+    original: String,
 });
 
+
+const Observation = mongoose.model('Observation', observation);
+
+
+app.post('/api/create', upload.single('image'), function(req, res, next) {
+    // req.file is the `avatar` file 
+    // req.body will hold the text fields, if there were any 
+
+    const imageFile = `images/image/${req.file.filename}`;
+
+    sharp(req.file.path)
+        .resize(768, 720)
+        .toFile('public/' + imageFile)
+        .then(() => {
+            //console.log('saved image in 768x720 resolution');
+        }).catch((err) => {
+            console.log(err);
+        });
+
+    const thumbnailFile = `images/thumbnail/${req.file.filename}`;
+    sharp(req.file.path)
+        .resize(320, 300)
+        .toFile('public/' + thumbnailFile)
+        .then(() => {
+            //console.log('saved image in 320x300 resolution');
+        }).catch((err) => {
+            console.log(err);
+        });
+
+    const originalFile = 'images/' + req.file;
+
+    const observationObject = new Observation({
+        time: new Date(),
+        category: req.body.category,
+        title: req.body.title,
+        details: req.body.description,
+        coordinates: {
+            'lat': req.body.locationX,
+            'lng': req.body.locationY,
+        },
+        thumbnail: thumbnailFile,
+        image: imageFile,
+        original: originalFile,
+    });
+    observationObject.save(function(err, observationObject) {
+        if (err) return console.error(err);
+    });
+    res.redirect('../index.html');
+
+});
+
+app.get('/api/events', function(req, res) {
+    Observation.find(function(err, observationCollection) {
+        if (err) return console.error(err);
+        res.send(observationCollection);
+    });
+});
 
 app.listen(3000);

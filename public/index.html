@@ -10,23 +10,7 @@
     <title>3 Col Portfolio - Start Bootstrap Template</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/3-col-portfolio.css" rel="stylesheet">
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-    <style>
-        #map {
-            height: 150px;
-            width: 150px;
-            position: absolute;
-            top: 0px;
-            right: 15px;
-        }
-
-        #modalImage {
-            height: 400;
-            width: 400;
-        }
-    </style>
+    <link href="css/custom.css" rel="stylesheet">
 </head>
 
 <body>
@@ -37,7 +21,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul id="topbar" class="nav navbar-nav">
-                    <li><a href="index.html">All</a></li>
+                    <li><a href="index.html"><b>All</b></a></li>
+                    <li><a href="create.html"><b>Create</b></a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -62,16 +47,18 @@
                         <h4>
                 </div>
                 <div class="modal-body">
-                    <div id="map"></div>
+                    <div id="mapModal"></div>
                     <img id="modalImage" class="img-responsive" src="" alt="">
 
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-default" data-dismiss="modal">Close</a>
                 </div>
-            </div>
+             </div>
         </div>
     </div>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
     <script defer src="main.js"></script>
@@ -79,24 +66,6 @@
     <script defer src="functions.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvkp-hH2o_yI7V6rintnrmqZ_uwOZQEpE"></script>
     <script defer src="map_stuff.js"></script>
-
-    <script defer>
-        "use strict";
-
-        $(document).ready(function () {
-
-    
-
-                let getCategory = window.location.search.substr(1).split('=');
-                if (getCategory.length == 2) {
-                    functionOne(spyArray, getCategory[1]);
-                } else {
-                    functionOne(spyArray);
-                }
-
-        });
-    </script>
-
 </body>
 
 </html>

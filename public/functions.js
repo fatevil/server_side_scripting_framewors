@@ -1,33 +1,35 @@
-const functionOne = function (array, inputCategory = 'all') {
+'user strict';
+
+// load observations to div#puthere in index.html, load categories to navbar
+const loadObservations = function(array, inputCategory = 'all') {
 
     if (inputCategory == 'all') {
-        array.forEach(function (element) {
-            const z = document.createElement('div');
-            z.innerHTML = template_function(element);
-            document.getElementById("puthere").appendChild(z);
-
-        }, this);
-
+        array.forEach((observation) => appendObservationDiv(observation));
     } else {
-        array.filter(a => a.category == inputCategory).forEach(function (element) {
-            var z = document.createElement('div');
-            z.innerHTML = template_function(element);
-            document.getElementById("puthere").appendChild(z);
-
-        }, this);
+        array.filter((observation) => observation.category == inputCategory).
+        forEach((observation) => appendObservationDiv(observation));
     }
 
-    let unique = [...new Set(array.map(a => a.category))];
+    let unique = [...new Set(array.map((a) => a.category))];
 
-    unique.forEach(function (element) {
-        var z = document.createElement('li');
-        z.innerHTML = template_category_button(element);
-        document.getElementById("topbar").appendChild(z);
-
-    }, this);
+    unique.forEach((category) => appendCategoryToNavbar(category));
 };
 
+// create div with observation details
+const appendObservationDiv = (observation) => {
+    const z = document.createElement('div');
+    z.innerHTML = template_function(observation);
+    document.getElementById("puthere").appendChild(z);
+};
 
+// create link for observation category
+const appendCategoryToNavbar = (category) => {
+    const z = document.createElement('li');
+    z.innerHTML = template_category_button(category);
+    document.getElementById("topbar").appendChild(z);
+};
+
+// create link for observation category
 const template_category_button = (record) => {
     return `<a href="index.html?category=${record}">${record}</a>`;
 }
@@ -41,7 +43,7 @@ const template_function = (record) => {
                  <img class="img-responsive" src="${record.thumbnail}" alt="">
                 </a>
                 <h3>
-                    <a href="#">${record.title}</a> <small>${record.time }</small>
+                    <a href="#">${record.title}</a> <p><small>${record.time}</small></p>    
                 </h3>
                 <p>${record.details}</p>
 <a class="openmodal" data-coordinates-y="${record.coordinates.lng}" data-coordinates-x="${record.coordinates.lat}"  
