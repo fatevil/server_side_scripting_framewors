@@ -12,8 +12,8 @@
  };
 
 
- // get JSON from localhost 
- const response = fetchJsonFromUrl('api/events').then(function(response) {
+ // get JSON from api
+ fetchJsonFromUrl('api/events').then(function(response) {
      const getCategory = window.location.search.substr(1).split('=');
      if (getCategory.length == 2) {
          loadObservations(response, getCategory[1]);

@@ -41,6 +41,8 @@ const observation = mongoose.Schema({
 const Observation = mongoose.model('Observation', observation);
 
 
+
+
 app.post('/api/create', upload.single('image'), function(req, res, next) {
     // req.file is the `avatar` file 
     // req.body will hold the text fields, if there were any 
@@ -94,5 +96,21 @@ app.get('/api/events', function(req, res) {
         res.send(observationCollection);
     });
 });
+
+
+app.delete('/api/delete/:observationId', (req, res) => {
+
+
+    Observation.findById(req.params.observationId).remove().exec()
+        .then(() => {
+            res.send({
+                status: 'OK',
+            });
+        }).catch((err) => {
+            res.json(err);
+        });
+});
+
+
 
 app.listen(3000);
