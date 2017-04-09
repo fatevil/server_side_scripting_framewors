@@ -5,6 +5,7 @@ const app = express();
 const router = require('./router');
 const multer = require('multer');
 const sharp = require('sharp');
+const imageUtils = require('./model/images');
 const upload = multer({
     dest: 'public/images/',
 });
@@ -40,35 +41,16 @@ const observation = mongoose.Schema({
 
 const Observation = mongoose.model('Observation', observation);
 
-
-
-
 app.post('/api/create', upload.single('image'), function(req, res, next) {
     // req.file is the `avatar` file 
     // req.body will hold the text fields, if there were any 
+    delete req.body._id;
 
-    const imageFile = `images/image/${req.file.filename}`;
+    const imageFile = imageUtils.saveImage768x720(req.file.filename, req.file.path);
 
-    sharp(req.file.path)
-        .resize(768, 720)
-        .toFile('public/' + imageFile)
-        .then(() => {
-            //console.log('saved image in 768x720 resolution');
-        }).catch((err) => {
-            console.log(err);
-        });
+    const thumbnailFile = imageUtils.saveThumbnail(req.file.filename, req.file.path);
 
-    const thumbnailFile = `images/thumbnail/${req.file.filename}`;
-    sharp(req.file.path)
-        .resize(320, 300)
-        .toFile('public/' + thumbnailFile)
-        .then(() => {
-            //console.log('saved image in 320x300 resolution');
-        }).catch((err) => {
-            console.log(err);
-        });
-
-    const originalFile = 'images/' + req.file;
+    const originalFile = 'images/' + req.file.filename;
 
     const observationObject = new Observation({
         time: new Date(),
@@ -90,8 +72,18 @@ app.post('/api/create', upload.single('image'), function(req, res, next) {
 
 });
 
-app.get('/api/events', function(req, res) {
-    Observation.find(function(err, observationCollection) {
+app.get('/api/read', function(req, res) {
+    // console.log('GET read all');
+    Observation.find((err, observationCollection) => {
+        if (err) return console.error(err);
+        res.send(observationCollection);
+    });
+});
+app.get('/api/read/:property/:value', (req, res) => {
+    const property = req.params.property;
+    const value = req.params.value;
+    // console.log(`GET read ${property} ${value}`);
+    Observation.where(property.toLowerCase(), { $regex: '.*' + value + '.*' }).exec((err, observationCollection) => {
         if (err) return console.error(err);
         res.send(observationCollection);
     });
@@ -99,8 +91,6 @@ app.get('/api/events', function(req, res) {
 
 
 app.delete('/api/delete/:observationId', (req, res) => {
-
-
     Observation.findById(req.params.observationId).remove().exec()
         .then(() => {
             res.send({
@@ -111,6 +101,37 @@ app.delete('/api/delete/:observationId', (req, res) => {
         });
 });
 
+app.patch('/api/update', upload.single('image'), (req, res, next) => {
+    let observation = req.body;
+    delete observation.updateCheckBox;
+
+    if (req.file !== undefined) {
+        observation.image = imageUtils.saveImage768x720(req.file.filename, req.file.path);
+        observation.thumbnail = imageUtils.saveThumbnail(req.file.filename, req.file.path);
+        observation.original = 'images/' + req.file.filename;
+    }
+
+    console.log(observation);
+    Observation.update({
+        _id: observation._id
+    }, {
+        $set: observation
+    }, () => {
+        res.send({
+            status: 'OK'
+        });
+    });
+});
+
+app.get('/api/categories/read', (req, res) => {
+    // console.log("getting categories ");
+    Observation.find().select('category').exec()
+        .then((categories) => {
+            res.send(categories);
+        }).catch((err) => {
+            res.json(err);
+        });
+});
 
 
 app.listen(3000);

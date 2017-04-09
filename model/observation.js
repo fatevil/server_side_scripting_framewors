@@ -1,4 +1,5 @@
 'use strict';
+/*
 const mongoose = require('mongoose');
 
 const observation = mongoose.Schema({
@@ -23,7 +24,7 @@ module.exports = {
     Observation,
 };
 
-/*
+
 const silence = new Observation({
     time: Date,
     category: String,

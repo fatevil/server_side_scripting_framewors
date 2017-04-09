@@ -17,7 +17,6 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
                 <div class="tabbable-panel">
                     <div class="tabbable-line">
                         <ul id="topbar" class="nav nav-tabs ">
@@ -31,6 +30,11 @@
                                 <b>Create/Update</b> 
                                 </a>
                             </li>
+                            <li class="">
+                                <a href="index.html">
+                                <b>Homepage (refresh)</b> 
+                                </a>
+                            </li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab_default_1">
@@ -38,54 +42,74 @@
                                     <div class="container">
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Action <span class="caret"></span>
+                                                Category <span class="caret"></span>
                                             </button>
                                             <ul id="dropdown-menu" class="dropdown-menu">
                                                 <li><a href="index.html">All</a></li>
                                                 <li role="separator" class="divider"></li>
                                             </ul>
                                         </div>
+                                        <div class="container">
+                                            <div class="row">    
+                                                <div class="col-xs-8 col-xs-offset-2">
+                                                    <div class="input-group">
+                                                        <div class="input-group-btn search-panel" >
+                                                            <button id="filterButton" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                                <span id="search_concept">Filter by</span> <span class="caret"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu" role="menu">
+                                                            <li><a href="#ID">ID</a></li>
+                                                            <li><a href="#Title">Title</a></li>
+                                                            <li><a href="#Description">Details</a></li>
+                                                            </ul>
+                                                        </div>
+                                                        <input type="hidden" name="search_param" value="all" id="search_param">         
+                                                        <input type="text" class="form-control" id="searchTextInput" name="property" placeholder="Search term that contains...">
+                                                        <span class="input-group-btn">
+                                                            <button id="searchFilterButton" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     <div id="puthere"></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane" id="tab_default_2">
-                                <div role="tabpanel" class="tab-pane" id="homicek">
+                                <div role="tabpanel" class="tab-pane" >
                                      <div class="container">
-        <div class="col-lg-12">
-        <form method="post" action="/api/create" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="inputCategory">Category</label>
-                        <input type="text" class="form-control" name="category" placeholder="Enter category">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputTitle">Title</label>
-                        <input type="text" class="form-control" name="title" placeholder="Enter title">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputLocation">Location</label>
-                        <div id="map"></div>
-                        <input type="text" class="form-control" id="inputLocationX"  name="locationX">
-                        <input type="text" class="form-control"  id="inputLocationY" name="locationY">
+                                        <form method="post" action="/api/create" name="updateCreateForm" enctype="multipart/form-data">
+                                                <div class="form-group">
+                                                    <label for="inputCategory">Category</label>
+                                                    <input id="inputCategory" type="text" class="form-control" name="category" placeholder="Enter category">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputTitle">Title</label>
+                                                    <input id="inputTitle" type="text" class="form-control" name="title" placeholder="Enter title">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputLocationX">Location</label>
+                                                    <div id="map"></div>
+                                                    <input  type="text" class="form-control" id="inputLocationX"  name="locationX">
+                                                    <input type="text" class="form-control"  id="inputLocationY" name="locationY">
 
-                    </div>
-                    <div class="form-group">
-                        <label for="textareaDescription">Description</label>
-                        <textarea class="form-control"  name="description" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="imageInput">Image</label>
-                        <input type="file" class="form-control-file" name="image">
-                    </div>
-                    <span class="button-checkbox">
-                        <label><input name="updateCheckBox" type="checkbox" value="">Update existing</label>
-                        <input type="text" class="form-control"  id="id" name="_id">
-                    </span>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-        </div>
-
-    </div> 
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="textareaDescription">Description</label>
+                                                    <textarea id="textareaDescription" class="form-control"  name="details" rows="3"></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="imageInput">Image</label>
+                                                    <input id="imageInput" type="file" class="form-control-file" name="image">
+                                                </div>
+                                                <span class="button-checkbox">
+                                                    <label><input name="updateCheckBox" type="checkbox" value="">Update existing</label>
+                                                    <input type="text" class="form-control"  id="id" name="_id">
+                                                </span>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div> 
                                 </div>
                             </div>
                         </div>
@@ -93,7 +117,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
 
 
@@ -102,12 +125,11 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content" id="back">
                 <div class="modal-header">
-                    <h4>Contact
-                        <h4>
+                    <h4>Contact</h4>
                 </div>
                 <div class="modal-body">
                     <div id="mapModal"></div>
-                    <img id="modalImage" class="img-responsive" src="" alt="">
+                    <img id="modalImage" class="img-responsive" src="#" alt="observation image"/>
 
                 </div>
                 <div class="modal-footer">

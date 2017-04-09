@@ -88,5 +88,5 @@ $('#createUpdateLink').click((event) => {
         let currCenter = mapBig.getCenter();
         google.maps.event.trigger(mapBig, 'resize');
         mapBig.setCenter(currCenter);
-    }, 500);
+    }, 100);
 });

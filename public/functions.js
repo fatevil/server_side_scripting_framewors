@@ -1,20 +1,18 @@
 'user strict';
 
 // load observations to div#puthere in index.html, load categories to navbar
-const loadObservations = function(array, inputCategory = 'all') {
-
-    if (inputCategory == 'all') {
-        array.forEach((observation) => appendObservationDiv(observation));
+const loadObservations = function(array) {
+    //console.log(array);
+    if (array == null) {
+        console.log("empty result");
     } else {
-        array.filter((observation) => observation.category == inputCategory).
-        forEach((observation) => appendObservationDiv(observation));
+        array.forEach((observation) => appendObservationDiv(observation));
+
+        add_delete_listeners();
+        add_update_listeners(array);
     }
-    add_delete_listeners();
-    add_update_listeners(array);
 
-    let unique = [...new Set(array.map((a) => a.category))];
 
-    unique.forEach((category) => appendCategoryToNavbar(category));
 };
 
 // create div with observation details
@@ -32,8 +30,8 @@ const appendCategoryToNavbar = (category) => {
 };
 
 // create link for observation category
-const template_category_button = (record) => {
-    return `<a href="index.html?category=${record}">${record}</a>`;
+const template_category_button = (category) => {
+    return `<a href="index.html?category=${category}">${category}</a>`;
 }
 
 const add_delete_listeners = () => {
@@ -101,14 +99,15 @@ function eventFire(el, etype) {
     }
 }
 
-const loadObservation = (category, title, locationX, locationY, description, _id) => {
+const loadObservation = (category, title, locationX, locationY, details, _id) => {
+    console.log("loading observation");
     eventFire(document.getElementById('createUpdateLink'), 'click');
 
     document.querySelector('input[name=category]').value = category;
     document.querySelector('input[name=title]').value = title;
     document.querySelector('input[name=locationX]').value = locationX;
     document.querySelector('input[name=locationY]').value = locationY;
-    document.querySelector('textarea[name=description]').value = description;
+    document.querySelector('textarea[name=details]').value = details;
     document.querySelector('input[name=updateCheckBox]').checked = true;
     document.querySelector('input[name=_id]').value = _id;
 
@@ -121,3 +120,42 @@ const loadObservation = (category, title, locationX, locationY, description, _id
 
 
 };
+
+document.querySelector('form').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const formData = new FormData(evt.target);
+    let url;
+    let request;
+
+    if (formData.has('updateCheckBox')) {
+        request = {
+            method: 'PATCH',
+            body: formData,
+        };
+        url = '/api/update';
+        console.log('update');
+    } else {
+        request = {
+            method: 'POST',
+            body: formData,
+        };
+        url = '/api/create';
+        console.log('create');
+    }
+    fetch(url, request).then((resp) => {
+        console.log(resp);
+        window.location.href = `index.html`;
+    });
+});
+
+document.querySelector('#searchFilterButton').addEventListener('click', (evt) => {
+    const entry = $("#searchFilterButton").data('entry');
+    const value = $("#searchTextInput").val();
+
+    window.location.href = `index.html?${entry}=${value}`;
+});
+
+$(".dropdown-menu li a").click(function() {
+    $("#filterButton:first-child").text($(this).text());
+    $("#searchFilterButton").data('entry', $(this).text());
+});
