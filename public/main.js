@@ -25,4 +25,4 @@
      loadObservations(response);
  });
 
- fetchJsonFromUrl('api/categories/read').then((response) => response.forEach((object) => appendCategoryToNavbar(object.category)));
+ fetchJsonFromUrl('api/categories/read').then((response) => new Set(response).forEach((object) => appendCategoryToNavbar(object.category)));

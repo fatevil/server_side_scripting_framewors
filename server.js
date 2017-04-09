@@ -203,20 +203,11 @@ app.get('/api/read/:category/:title/:details', (req, res) => {
 });
 
 /**
- * @api {get} /api/read/:category/:title/:details Observations with filter on category, title and details.
- * @apiName ReadObservationExtendedFilter
+ * @api {delete} /api/delete/:observation Delete single observation with unique ID.
+ * @apiName DeleteObservation
  * @apiGroup Observation
- * @apiDescription Get observations with applied filter according to following. 
- * Each parameter specifies value which attributes category, title and details  have to contain.
- * For not aplying filter, put '-' instead. 
- * 
- * @apiExample {curl} Example usage - will find all observation:
- *  -  whose category contains "Another" and details contain "Helsinki"
- *  - there's no filter for title
- *     curl -i http://localhost:3000/api/read/Another/-/Helsinki/
+ * @apiDescription Delete observation with ID from parameter.
  *
- *
- * @apiError ObservationsNotFound  No observations with applied filter were found.
  */
 app.delete('/api/delete/:observationId', (req, res) => {
     Observation.findById(req.params.observationId).remove().exec()
@@ -229,6 +220,19 @@ app.delete('/api/delete/:observationId', (req, res) => {
         });
 });
 
+/**
+ * @api {patch} /api/update Update observation with unique ID.
+ * @apiName CreateObservation
+ * @apiGroup Observation
+ * @apiDescription Update observation with unique ID from specified in PATCH req body. 
+ *  Optionally ransforms image to thumbnail image and 768x720 image, saves then in image directory.
+ *  Should contain:
+ *      - category
+ *      - title
+ *      - locationX, locationY
+ *      - file: image (optional)
+ * 
+ */
 app.patch('/api/update', upload.single('image'), (req, res, next) => {
     let observation = req.body;
     delete observation.updateCheckBox;
@@ -250,15 +254,28 @@ app.patch('/api/update', upload.single('image'), (req, res, next) => {
     });
 });
 
+/**
+ * @api {get} /api/read Get collection of observations categories.
+ * @apiName ReadObservation
+ * @apiGroup Observation
+ * @apiDescription Get only "category" fields from observations. 
+ *
+ * @apiError CategoriesNotFound 404 No categories found.
+ */
 app.get('/api/categories/read', (req, res) => {
     // console.log("getting categories ");
     Observation.find().select('category').exec()
         .then((categories) => {
+            if (categories.length == 0) {
+                res.statusCode = 404;
+                res.statusMessage = 'Observation with given ID not found.';
+            } else {
+                res.statusMessage = 'Ok';
+            }
             res.send(categories);
         }).catch((err) => {
             res.json(err);
         });
 });
-
 
 app.listen(3000);
