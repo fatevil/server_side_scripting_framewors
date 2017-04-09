@@ -5,17 +5,16 @@ const app = express();
 const router = require('./router');
 const multer = require('multer');
 const sharp = require('sharp');
+const dbImport = require('./model/db');
 const imageUtils = require('./model/images');
 const upload = multer({
     dest: 'public/images/',
 });
 
-
 app.use(express.static('public'));
 
-
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://accountAdmin01:changeMe@127.0.0.1:27017/observations');
+mongoose.connect(dbImport.url);
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
