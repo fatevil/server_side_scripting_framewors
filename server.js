@@ -83,7 +83,9 @@ app.get('/api/read/:property/:value', (req, res) => {
     const property = req.params.property;
     const value = req.params.value;
     // console.log(`GET read ${property} ${value}`);
-    Observation.where(property.toLowerCase(), { $regex: '.*' + value + '.*' }).exec((err, observationCollection) => {
+    Observation.where(property.toLowerCase(), {
+        $regex: '.*' + value + '.*'
+    }).exec((err, observationCollection) => {
         if (err) return console.error(err);
         res.send(observationCollection);
     });
@@ -110,7 +112,6 @@ app.patch('/api/update', upload.single('image'), (req, res, next) => {
         observation.thumbnail = imageUtils.saveThumbnail(req.file.filename, req.file.path);
         observation.original = 'images/' + req.file.filename;
     }
-
     console.log(observation);
     Observation.update({
         _id: observation._id
