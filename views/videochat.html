@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>3 Col Portfolio - Start Bootstrap Template</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="css/custom.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">    
+    <link href="css/custom.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+                <div class="tabbable-panel">
+                    <div class="tabbable-line">
+                        <ul id="topbar" class="nav nav-tabs ">
+                            <li class="">
+                                <a href="/">
+                                <b>Back</b> 
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="/videochat">
+                                <b>Videochat</b> 
+                                </a>
+                            </li>
+                            <li class="">
+                                <a href="/logout">
+                                <b>Logout</b> 
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="container">
+            <div id="privateLink">Switch to private room: <a href="/videochat?private=true">private</a><br></div>
+            <button id="startButton">Start streaming</button>
+            <button id="stopButton">Stop streaming</button>
+            <button id="muteButton">Mute</button>
+            <button id="unmuteButton">Unmute</button>
+
+            <div class="videoContainer">
+                <video id="localVideo" style="height: 150px;" oncontextmenu="return false;"></video>
+                <meter id="localVolume" class="volume" min="-45" max="-20" high="-25" low="-40"></meter>
+            </div>
+            
+
+            <div id="localScreenContainer" class="videoContainer"></div>
+            <div id="remotes"></div>
+        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://simplewebrtc.com/latest-v2.js"></script>
+    <script src="js/rtc.js"></script>
+    </body>
+
+</html>

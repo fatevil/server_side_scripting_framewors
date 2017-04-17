@@ -5,11 +5,26 @@ const app = express();
 const router = require('./router');
 const multer = require('multer');
 const sharp = require('sharp');
+const passport = require('passport');
+const Strategy = require('passport-local').Strategy;
+const users = require('./model/users');
 const dbImport = require('./model/db');
 const imageUtils = require('./model/images');
+const fs = require('fs');
+const https = require('https');
+const http = require('http');
+
 const upload = multer({
     dest: 'public/images/',
 });
+
+const sslkey = fs.readFileSync('ssl-key.pem');
+const sslcert = fs.readFileSync('ssl-cert.pem')
+
+const options = {
+    key: sslkey,
+    cert: sslcert,
+};
 
 app.use(express.static('public'));
 
@@ -18,10 +33,73 @@ mongoose.connect(dbImport.url);
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-    // we're connected!
+
+// Configure the local strategy for use by Passport.
+//
+// The local strategy require a `verify` function which receives the credentials
+// (`username` and `password`) submitted by the user.  The function must verify
+// that the password is correct and then invoke `cb` with a user object, which
+// will be set at `req.user` in route handlers after authentication.
+passport.use(new Strategy(
+    function(username, password, cb) {
+        console.log(username);
+        console.log(password);
+        users.findByUsername(username, function(err, user) {
+            if (err) {
+                return cb(err);
+            }
+            if (!user) {
+                return cb(null, false);
+            }
+            if (user.password != password) {
+                return cb(null, false);
+            }
+            return cb(null, user);
+        });
+    }));
+
+
+// Configure Passport authenticated session persistence.
+//
+// In order to restore authentication state across HTTP requests, Passport needs
+// to serialize users into and deserialize users out of the session.  The
+// typical implementation of this is as simple as supplying the user ID when
+// serializing, and querying the user record by ID from the database when
+// deserializing.
+passport.serializeUser(function(user, cb) {
+    cb(null, user.id);
 });
 
+passport.deserializeUser(function(id, cb) {
+    users.findById(id, function(err, user) {
+        if (err) {
+            return cb(err);
+        }
+        cb(null, user);
+    });
+});
+
+// Configure view engine to render EJS templates.
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+
+// Use application-level middleware for common functionality, including
+// logging, parsing, and session handling.
+app.use(require('morgan')('combined'));
+app.use(require('cookie-parser')());
+app.use(require('body-parser').urlencoded({
+    extended: true
+}));
+app.use(require('express-session')({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false
+}));
+
+// Initialize Passport and restore authentication state, if any, from the
+// session.
+app.use(passport.initialize());
+app.use(passport.session());
 
 const observation = mongoose.Schema({
     time: Date,
@@ -37,9 +115,66 @@ const observation = mongoose.Schema({
     original: String,
 });
 
-
 const Observation = mongoose.model('Observation', observation);
 
+db.once('open', function() {
+    console.log('Connected to MongoDB');
+
+    https.createServer(options, app).listen(3000);
+    console.log(`HTTPS Listening on port 3000 `);
+
+    http.createServer((req, res) => {
+        res.writeHead(301, {
+            'Location': 'https://localhost:3000' + req.url
+        });
+        res.end();
+    }).listen(8000);
+    console.log(`HTTP Listening on port 8000 `);
+});
+
+
+app.get('/login',
+    function(req, res) {
+        //res.render('login', { user: req.user });
+        res.sendFile(__dirname + '/public/login.html');
+    });
+
+app.post('/login',
+    passport.authenticate('local', {
+        failureRedirect: '/login'
+    }),
+    function(req, res) {
+        console.log(req);
+        res.cookie('username', req.user.username);
+        res.redirect('/');
+    });
+
+app.get('/logout',
+    function(req, res) {
+        res.cookie('username', '');
+        req.logout();
+        res.redirect('/');
+    });
+
+app.get('/profile',
+    require('connect-ensure-login').ensureLoggedIn(),
+    function(req, res) {
+        res.render('profile', {
+            user: req.user
+        });
+    });
+
+
+app.get('/',
+    require('connect-ensure-login').ensureLoggedIn(),
+    function(req, res) {
+        res.sendFile(__dirname + '/views/index.html');
+    });
+app.get('/videochat',
+    require('connect-ensure-login').ensureLoggedIn(),
+    function(req, res) {
+        res.sendFile(__dirname + '/views/videochat.html');
+    });
 
 /**
  * @api {post} /api/create Create new observation.
@@ -276,5 +411,3 @@ app.get('/api/categories/read', (req, res) => {
             res.json(err);
         });
 });
-
-app.listen(3000);
